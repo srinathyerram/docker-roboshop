@@ -6,29 +6,30 @@ services:
     image: joindevops/catalogue:v1
     container_name: catalogue
     depends_on:
-    - mongodb
+      - mongodb
   mongodb:
     build: ./mongodb
     image: joindevops/mongodb:v1
     container_name: mongodb
     volumes:
-    - mongodb:/data/db
+      - mongodb:/data/db
   redis:
     image: redis:7.0
     container_name: redis
     volumes:
-    - redis:/data
+      - redis:/data
   mysql:
     build: ./mysql
     image: joindevops/mysql:v1
     container_name: mysql
     volumes:
-    - mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
   rabbitmq:
     image: rabbitmq:3
     container_name: rabbitmq
-    volumes: # -v rabbitmq:/var/lib/rabbitmq
-    - rabbitmq:/var/lib/rabbitmq
+    volumes:
+      # -v rabbitmq:/var/lib/rabbitmq
+      - rabbitmq:/var/lib/rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: roboshop
       RABBITMQ_DEFAULT_PASS: roboshop123
@@ -37,42 +38,42 @@ services:
     image: joindevops/user:v1
     container_name: user
     depends_on:
-    - mongodb
-    - redis
+      - mongodb
+      - redis
   cart:
     build: ./cart
     image: joindevops/cart:v1
     container_name: cart
     depends_on:
-    - redis
-    - catalogue
+      - redis
+      - catalogue
   shipping:
     build: ./shipping
     image: joindevops/shipping:v1
     container_name: shipping
     depends_on:
-    - mysql
-    - cart
+      - mysql
+      - cart
   payment:
     build: ./payment
     image: joindevops/payment:v1
     container_name: payment
     depends_on:
-    - rabbitmq
-    - cart
-    - user
+      - rabbitmq
+      - cart
+      - user
   frontend:
     build: ./frontend
     image: joindevops/frontend:v1
     container_name: frontend
     ports:
-    - "80:80"
+      - "80:80"
     depends_on:
-    - catalogue
-    - user
-    - cart
-    - shipping
-    - payment
+      - catalogue
+      - user
+      - cart
+      - shipping
+      - payment
 networks:
   default:
     driver: bridge
